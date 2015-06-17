@@ -1,0 +1,6 @@
+@charset "utf-8";
+/* CSS Document */
+#map-canvas {
+	width: 500px;
+	height: 400px;
+}

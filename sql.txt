@@ -1,0 +1,11 @@
+select AnB_Test.CustDeliveryAddress.PostalName, AnB_Test.CustDeliveryAddress.PostCode, UK_Postcodes.postcodelatlng.latitude, UK_Postcodes.postcodelatlng.longitude
+from AnB_Test.CustDeliveryAddress
+join UK_Postcodes.postcodelatlng
+on replace(AnB_Test.CustDeliveryAddress.PostCode, " ", "") = UK_Postcodes.postcodelatlng.postcode;
+
+select * from AnB_Test.CustDeliveryAddress
+where AnB_Test.CustDeliveryAddress.PostCode != "";
+
+select * from UK_Postcodes.postcodelatlng;
+
+select PostalName, AddressLine1, AddressLine2, AddressLine3, City, County, PostCode from AnB_Test.CustDeliveryAddress;

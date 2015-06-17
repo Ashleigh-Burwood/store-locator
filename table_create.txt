@@ -1,0 +1,30 @@
+//SQL Table Creation for AnB_Test.DeliveryAddress
+
+create table AnB_Live.DeliveryAddress
+select AnB_Live.SLCustomerAccount.SLCustomerAccountID, AnB_Live.SLCustomerAccount.CustomerAccountNumber, AnB_Live.SLCustomerAccount.CustomerAccountName, AnB_Live.SLCustomerAccount.AnalysisCode2, AnB_Live.CustDeliveryAddress.CustomerID, AnB_Live.CustDeliveryAddress.PostalName, AnB_Live.CustDeliveryAddress.AddressLine1, AnB_Live.CustDeliveryAddress.AddressLine2, AnB_Live.CustDeliveryAddress.AddressLine3, AnB_Live.CustDeliveryAddress.AddressLine4, AnB_Live.CustDeliveryAddress.City, AnB_Live.CustDeliveryAddress.County, AnB_Live.CustDeliveryAddress.PostCode, AnB_Live.CustDeliveryAddress.CountryCodeID
+from AnB_Live.SLCustomerAccount
+join AnB_Live.CustDeliveryAddress
+on AnB_Live.SLCustomerAccount.SLCustomerAccountID = AnB_Live.CustDeliveryAddress.CustomerID
+where AnB_Live.CustDeliveryAddress.CountryCodeID = 13 and AnB_Live.SLCustomerAccount.AnalysisCode2 != 'closed' and AnB_Live.CustDeliveryAddress.PostCode != '';
+
+alter table AnB_Live.DeliveryAddress add lat decimal(10, 8) not null;
+alter table AnB_Live.DeliveryAddress add lng decimal(11, 8) not null;
+alter table AnB_Live.DeliveryAddress add uni_id int primary key auto_increment first;
+
+
+
+
+create table AnB_Live.DeliveryAddress
+select AnB_Live.SLCustomerAccount.SLCustomerAccountID, AnB_Live.SLCustomerAccount.CustomerAccountNumber, AnB_Live.SLCustomerAccount.CustomerAccountName, AnB_Live.SLCustomerAccount.AnalysisCode2, AnB_Live.CustDeliveryAddress.CustomerID, AnB_Live.CustDeliveryAddress.PostalName, AnB_Live.CustDeliveryAddress.AddressLine1, AnB_Live.CustDeliveryAddress.AddressLine2, AnB_Live.CustDeliveryAddress.AddressLine3, AnB_Live.CustDeliveryAddress.AddressLine4, AnB_Live.CustDeliveryAddress.City, AnB_Live.CustDeliveryAddress.County, AnB_Live.CustDeliveryAddress.PostCode, AnB_Live.CustDeliveryAddress.CountryCodeID
+from AnB_Live.SLCustomerAccount
+join AnB_Live.CustDeliveryAddress
+on AnB_Live.SLCustomerAccount.SLCustomerAccountID = AnB_Live.CustDeliveryAddress.CustomerID
+where AnB_Live.CustDeliveryAddress.CountryCodeID = 13 and AnB_Live.SLCustomerAccount.AnalysisCode2 != 'closed' and AnB_Live.CustDeliveryAddress.PostCode != '';
+
+alter table AnB_Live.DeliveryAddress add lat decimal(10, 8) not null;
+alter table AnB_Live.DeliveryAddress add lng decimal(11, 8) not null;
+alter table AnB_Live.DeliveryAddress add uni_id int primary key auto_increment first;
+
+select * from AnB_Live.DeliveryAddress where AnB_Live.DeliveryAddress.CustomerAccountName like "%*%";
+
+delete from AnB_Live.DeliveryAddress where AnB_Live.DeliveryAddress.uni_id = 176;
