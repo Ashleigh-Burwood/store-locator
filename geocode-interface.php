@@ -28,7 +28,7 @@
                 <?php 
                 
                     //$sql = 'select PostalName, AddressLine1, AddressLine2, AddressLine3, City, County, PostCode from AnB_Test.CustDeliveryAddress';
-					$sql = "select uni_id, PostalName from AnB_Live.DeliveryAddress";
+					$sql = "select uni_id, PostalName from AnB_Live.DeliveryAddress where lat = 0 or lng = 0 order by PostalName";
                     $result = mysql_query($sql, $link);
                     
                     while ( $row = mysql_fetch_array($result) )
