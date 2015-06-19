@@ -46,27 +46,35 @@ while ( $row = mysql_fetch_array($result) )
 	
 	//but we only want to geocode if it's needed so if statement ahoy
 	
-	if ($row['lat'] = 0) {	
+	//if the lat entry for this record is 0 attempt to geocode
+	if ($row['lat'] == 0) {
+		//true so
 		//call the getLocationLat of the geocoder class and store result in variable
 		$getGeocodeLat = $geocoder->getLocationLat($addressString);
 		$hasAttemptedLat = true;
 	} else {
+		//false so
+		//set the variable holding the geocode result to false and record that the attempt was not made (false)
 		$getGeocodeLat = false;
 		$hasAttemptedLat = false;		
 	}
 	
-	if ($row['lng'] = 0) {
-		//then call the getLocationLat of the geocoder class and store result in variable
+	//if the lng entry for this record is 0 attempt to geocode
+	if ($row['lng'] == 0) {
+		//true so
+		//call the getLocationLat of the geocoder class and store result in variable
 		$getGeocodeLng = $geocoder->getLocationLng($addressString);
 		$hasAttemptedLng = true;
 	} else {
+		//false so
+		//set the variable holding the geocode result to false and record that the attempt was not made (false)
 		$getGeocodeLng = false;
 		$hasAttemptedLng = false;
 	}
 	
 	//test if attempts were made
 	if ($hasAttemptedLat && $hasAttemptedLng) {
-		//either attempt has been made, so comment on success or not
+		//both attempts have been made, so comment on success or not
 		
 		//test if both geocode requests were successfull
 		if ( $getGeocodeLat && $getGeocodeLng ) {
