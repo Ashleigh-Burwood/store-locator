@@ -44,44 +44,33 @@ while ( $row = mysql_fetch_array($result) )
 	//now we have the formatted address, send for geocoding
 	//use the previously created geocoder object to do so
 	
-	//but we only want to geocode if it's needed so if statement ahoy
+	//but we only want to geocode if it's needed so if statements ahoy
 	
-	//if the lat entry for this record is 0 attempt to geocode
-	if ($row['lat'] == 0) {
-		//true so
-		//call the getLocationLat of the geocoder class and store result in variable
-		$getGeocodeLat = $geocoder->getLocationLat($addressString);
-		$hasAttemptedLat = true;
+	//changing the way the API call is made so that only 1 call is made per record
+	if ($row['lat'] == 0 || $row['lng'] == 0) {
+		//if either lat or lng of record are equal to 0 then make a call to API,
+		//store result array in variable
+		//and record that call has been attempted
+		$getGeocodeLatLng = $geocoder->getLatLng($addressString);
+		$hasAttemptedGeocode = true;
 	} else {
-		//false so
-		//set the variable holding the geocode result to false and record that the attempt was not made (false)
-		$getGeocodeLat = false;
-		$hasAttemptedLat = false;		
+		//the record was already geocoded
+		//set the result array to false
+		//and record that the call to the API was not made
+		$getGeocodeLatLng = false;
+		$hasAttemptedGeocode = false;
 	}
 	
-	//if the lng entry for this record is 0 attempt to geocode
-	if ($row['lng'] == 0) {
-		//true so
-		//call the getLocationLat of the geocoder class and store result in variable
-		$getGeocodeLng = $geocoder->getLocationLng($addressString);
-		$hasAttemptedLng = true;
-	} else {
-		//false so
-		//set the variable holding the geocode result to false and record that the attempt was not made (false)
-		$getGeocodeLng = false;
-		$hasAttemptedLng = false;
-	}
-	
-	//test if attempts were made
-	if ($hasAttemptedLat && $hasAttemptedLng) {
-		//both attempts have been made, so comment on success or not
-		
-		//test if both geocode requests were successfull
-		if ( $getGeocodeLat && $getGeocodeLng ) {
-			//true - so update the database
+	//check if geocoding attempt was made
+	if ($hasAttemptedGeocode) {
+		//attempt was made so,
+		//check if the attempt was successfull
+		if ($getGeocodeLatLng) {
+			//attempt was successful so,
+			//so update the database
 			
 			//compose the update query
-			$updateSql = "update AnB_Live.DeliveryAddress set lat = " . $getGeocodeLat . ", lng = " . $getGeocodeLng . "where uni_id = " . $row['uni_id'];
+			$updateSql = "update AnB_Live.DeliveryAddress set lat = " . $getGeocodeLatLng['lat'] . ", lng = " . $getGeocodeLatLng['lng'] . "where uni_id = " . $row['uni_id'];
 			//send query to database
 			$aResult = mysql_query($updateSql, $link);
 			
@@ -93,17 +82,20 @@ while ( $row = mysql_fetch_array($result) )
 				//false - so print out that it failed (but that the geocoding was OK.
 				echo "Although the Geocoding for " . $row['PostalName'] . " was successfull, something went wrong and the database update failed." . "<br />";
 			}
-					
+			
 		} else {
-			//false - so print the name of the address that failed
-			echo "Geocoding failed, please update manually - PostalName: " . $row['PostalName'] . " Post Code: " . $row['PostCode']. "<br />";		
+			//attempt was made but was not successful so,
+			echo "<strong>Geocoding failed</strong>, please update manually - PostalName: <strong>" . $row['PostalName'] . "</strong> Post Code: <strong>" . $row['PostCode']. "</strong><br />";			
 		}
+	//as an attempt to geocode was made, pause the execution of the code so that our request per second limit is not reached.
+	sleep(1);	
 	} else {
-		//either one or both geocoding attempts have not been made, so comment on that
-		echo "Geocoding was not attempted. Possible that record for " . $row['PostalName'] . " is up to date.<br />";
-		echo "Further details:<br />Lat Attempt: " . $hasAttemptedLat . "<br />Lng Attempt: " . $hasAttemptedLng . "<br />";	
-	}
-	sleep(1);
+		//the attempt was not made so,
+		//comment on that
+		echo "Geocoding attempt was not made for account: <strong>" . $row['PostalName'] . "</strong><br />";
+		echo "Record possibly up-to-date:<br />Lat: " . $row['lat'] . "<br />Lng: " . $row['lng'] . "<br />";
+	}	
+	
 } //end of while loop
 mysql_close($link);
 
