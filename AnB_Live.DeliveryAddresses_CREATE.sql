@@ -102,3 +102,6 @@ ALTER TABLE AnB_Live.DeliveryAddress ADD lng DECIMAL(11, 8) NOT NULL;
 
 -- add uni_id
 ALTER TABLE AnB_Live.DeliveryAddress ADD uni_id INT PRIMARY KEY AUTO_INCREMENT FIRST;
+
+
+select uni_id, PostalName, lat, lng from AnB_Live.DeliveryAddress where lat = 0 or lng = 0 order by PostalName
