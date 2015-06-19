@@ -46,7 +46,7 @@ while ( $row = mysql_fetch_array($result) )
 	
 	//but we only want to geocode if it's needed so if statement ahoy
 	
-	if ($row['lat'] != 0.00000000) {	
+	if ($row['lat'] = 0) {	
 		//call the getLocationLat of the geocoder class and store result in variable
 		$getGeocodeLat = $geocoder->getLocationLat($addressString);
 		$hasAttemptedLat = true;
@@ -55,7 +55,7 @@ while ( $row = mysql_fetch_array($result) )
 		$hasAttemptedLat = false;		
 	}
 	
-	if ($row['lng'] != 0.00000000) {
+	if ($row['lng'] = 0) {
 		//then call the getLocationLat of the geocoder class and store result in variable
 		$getGeocodeLng = $geocoder->getLocationLng($addressString);
 		$hasAttemptedLng = true;
@@ -92,8 +92,8 @@ while ( $row = mysql_fetch_array($result) )
 		}
 	} else {
 		//either one or both geocoding attempts have not been made, so comment on that
-		echo "Geocoding was not attempted. Possible that record for " + $row['PostalName'] + " is up to date.<br />";
-		echo "Further details:<br />Lat Attempt: " + $hasAttemptedLat + "<br />Lng Attempt: " + $hasAttemptedLng + "<br />";	
+		echo "Geocoding was not attempted. Possible that record for " . $row['PostalName'] . " is up to date.<br />";
+		echo "Further details:<br />Lat Attempt: " . $hasAttemptedLat . "<br />Lng Attempt: " . $hasAttemptedLng . "<br />";	
 	}
 	sleep(1);
 } //end of while loop
